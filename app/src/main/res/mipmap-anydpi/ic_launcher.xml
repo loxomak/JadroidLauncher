@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Legacy launcher icon for API < 26 (vector drawables are supported since API 21). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FF7A1A"
+        android:pathData="M0,0h108v108h-108z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M34,30h40a4,4 0 0 1 4,4v6h-48v-6a4,4 0 0 1 4,-4z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M46,44h16v34a6,6 0 0 1 -6,6h-4a6,6 0 0 1 -6,-6z" />
+    <path
+        android:fillColor="#FFD9B3"
+        android:pathData="M30,56h12c3,0 5,2 5,5v4c0,3 -2,5 -5,5h-12c-3,0 -5,-2 -5,-5v-4c0,-3 2,-5 5,-5z" />
+    <path
+        android:fillColor="#FFD9B3"
+        android:pathData="M66,56h12c3,0 5,2 5,5v4c0,3 -2,5 -5,5h-12c-3,0 -5,-2 -5,-5v-4c0,-3 2,-5 5,-5z" />
+</vector>

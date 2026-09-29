@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.Jadroid" parent="android:Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/jadroid_orange_dark</item>
+        <item name="android:navigationBarColor">@color/jadroid_orange</item>
+        <item name="android:windowBackground">@color/jadroid_white</item>
+    </style>
+</resources>

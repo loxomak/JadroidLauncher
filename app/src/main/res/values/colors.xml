@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="jadroid_orange">#FF7A1A</color>
+    <color name="jadroid_orange_dark">#C24E00</color>
+    <color name="jadroid_orange_deep">#2A1708</color>
+    <color name="jadroid_white">#FFFFFFFF</color>
+</resources>
