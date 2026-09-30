@@ -108,6 +108,49 @@ runtime (Settings -> *Microsoft application (client) id*):
 If you publish your own build, register your own Azure application (public client, "Allow public
 client flow" enabled) so your users authenticate against your app id.
 
+### Release builds & signing
+
+The keystore is never stored in the repository. Provide it through environment variables (CI) or
+Gradle properties (local), then build the release variant:
+
+```bash
+export JADROID_KEYSTORE_PATH=/absolute/path/jadroid-release.jks
+export JADROID_KEYSTORE_PASSWORD=...
+export JADROID_KEY_ALIAS=jadroid
+export JADROID_KEY_PASSWORD=...
+
+./gradlew assembleRelease        # signed APK in app/build/outputs/apk/release/
+```
+
+Create the keystore once with:
+
+```bash
+keytool -genkeypair -v -keystore jadroid-release.jks -alias jadroid \
+  -keyalg RSA -keysize 2048 -validity 10000
+```
+
+`JADROID_*` variables can also live in `~/.gradle/gradle.properties` as `jadroid.keystorePath`,
+`jadroid.keystorePassword`, `jadroid.keyAlias` and `jadroid.keyPassword`. When no keystore is
+configured, `assembleRelease` falls back to the debug key and prints a warning, so release builds
+stay installable for testing — never ship such an APK as an official release.
+
+### Automated releases
+
+`.github/workflows/android-release.yml` builds the app and publishes it:
+
+1. add the repository secrets `JADROID_KEYSTORE_BASE64` (`base64 -w0 jadroid-release.jks`),
+   `JADROID_KEYSTORE_PASSWORD`, `JADROID_KEY_ALIAS` and `JADROID_KEY_PASSWORD` (optional — without
+   them the CI debug key is used),
+2. push a tag:
+
+```bash
+git tag v1.0.1 && git push origin v1.0.1
+```
+
+The workflow builds `app-release.apk`, renames it to `jadroid-<tag>.apk`, writes a `.sha1` next to
+it, keeps both as workflow artifacts and attaches them to the GitHub release for that tag. Running
+the workflow manually (`workflow_dispatch`) only uploads the workflow artifacts.
+
 ## Notes & limitations
 
 * Rule evaluation maps Android to the `linux` OS profile (that is what selects the `natives-linux`
