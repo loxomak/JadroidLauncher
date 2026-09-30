@@ -22,6 +22,14 @@ on:
 permissions:
   contents: write
 
+# Secrets cannot be referenced directly in an `if:` expression ("Unrecognized named-value:
+# 'secrets'"), so they are mapped into environment variables first and tested through `env`.
+env:
+  KEYSTORE_BASE64: ${{ secrets.JADROID_KEYSTORE_BASE64 }}
+  JADROID_KEYSTORE_PASSWORD: ${{ secrets.JADROID_KEYSTORE_PASSWORD }}
+  JADROID_KEY_ALIAS: ${{ secrets.JADROID_KEY_ALIAS }}
+  JADROID_KEY_PASSWORD: ${{ secrets.JADROID_KEY_PASSWORD }}
+
 jobs:
   build:
     name: Build APK
@@ -49,16 +57,12 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('gradle/wrapper/gradle-wrapper.properties', 'gradle/libs.versions.toml') }}
 
       - name: Decode signing keystore
-        if: ${{ secrets.JADROID_KEYSTORE_BASE64 != '' }}
+        if: env.KEYSTORE_BASE64 != ''
         run: |
-          echo "${{ secrets.JADROID_KEYSTORE_BASE64 }}" | base64 -d > "$RUNNER_TEMP/jadroid-release.jks"
+          echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/jadroid-release.jks"
           echo "JADROID_KEYSTORE_PATH=$RUNNER_TEMP/jadroid-release.jks" >> "$GITHUB_ENV"
 
       - name: Build release APK
-        env:
-          JADROID_KEYSTORE_PASSWORD: ${{ secrets.JADROID_KEYSTORE_PASSWORD }}
-          JADROID_KEY_ALIAS: ${{ secrets.JADROID_KEY_ALIAS }}
-          JADROID_KEY_PASSWORD: ${{ secrets.JADROID_KEY_PASSWORD }}
         run: ./gradlew assembleRelease --no-daemon --stacktrace
 
       - name: Collect and checksum the APK
